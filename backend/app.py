@@ -5,7 +5,7 @@ import requests
 from urllib.parse import urljoin, urlparse
 import flask_cors
 
-from scrape import REQUEST_DELAY, crawl_page, crawl_site
+from scrape_test import REQUEST_DELAY, crawl_page, crawl_site, crawl_google_search, scrape_google_search_queries
 
 API_KEY = "AIzaSyB9-OpOGk5bwLNcosU4HpA35HAcvhMrBT8"
 CX = "f1d45d72b7570443b"
@@ -13,19 +13,18 @@ CX = "f1d45d72b7570443b"
 # app = Flask(__name__)
 # CORS(app)                             
 
-
-def scrape_site(links):
-    res = []
-    for link in links:
-        response = requests.get(link)
-        soup = BeautifulSoup(response.text, 'html.parser')
+# def scrape_site(links):
+#     res = []
+#     for link in links:
+#         response = requests.get(link)
+#         soup = BeautifulSoup(response.text, 'html.parser')
         
-        results = soup.find_all('div', class_='g')
-        text = ' '.join([result.get_text() for result in results[:]])
-        print(f"text: {text} \n")
-        res.append(text)
+#         results = soup.find_all('div', class_='g')
+#         text = ' '.join([result.get_text() for result in results[:]])
+#         print(f"text: {text} \n")
+#         res.append(text)
         
-    return res
+#     return res
 
 def main():
     queries = []
@@ -37,29 +36,31 @@ def main():
     query = f"{'+'.join(name.split())}+{'+'.join(school.split())}"
     seed_url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={API_KEY}&cx={CX}"
 
-    crawled_results = crawl_site(seed_url, queries,max_pages=3)
+    # crawled_results = crawl_site(seed_url, queries, max_pages=3)
 
-    print("Total pages crawled:", len(crawled_results))
+    search_results = crawl_google_search(seed_url)
 
-    for i, url in enumerate(crawled_results.keys(), 1):
-        print(f"{i}. {url}")
+    if search_results:
+        crawled_results = scrape_google_search_queries(search_results, queries)
+    else:
+        print("No search results found.")
+
+    # print("Total pages crawled:", len(crawled_results))
+
+    # for i, url in enumerate(crawled_results.keys(), 1):
+    #     print(f"{i}. {url}")
 
     if crawled_results:
-        # print(crawled_results)    
-
-        for pages in crawled_results.keys():
-            info = crawled_results[pages]
-            print("\nTitle of first page:", info['title'])
-            print("Text sample:", info['text'], "...")
-            print("Outbound links found:", len(info['links']))
+        print(crawled_results)    
 
         # page = next(iter(crawled_results))  # get one URL from dictionary
-        # info = crawled_results[page]
+        #   info = crawled_results[pages]
+        #     print("\nTitle of first page:", info['title'])
+        #     print("Text sample:", info['text'], "...")
+        #     print("Outbound links found:", len(info['links']))
+
         
     
-        # scrape_results = scrape_site(info['links'])
-        # print(scrape_results)
-
 main()
 
 # @app.route('/analyze', methods=['POST'])

@@ -5,10 +5,28 @@ CX = "f1d45d72b7570443b"
 query = "john nanyang"
 
 url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={API_KEY}&cx={CX}"
-response = requests.get(url)
-data = response.json()
 
-for item in data.get("items", []):
-    print("Title:", item["title"])
-    print("Link:", item["link"])
-    print("Snippet:", item["snippet"])
+def test():
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+
+        items = data.get("items", [])
+        print(f"Length of items: {len(items)}")
+        results = [
+            {
+                "title": item.get("title", ""),
+                "link": item.get("link", ""),
+                "snippet": item.get("snippet", "")
+            }
+            for item in items
+        ]
+        return results
+
+    except Exception as e:
+        print(f"Error fetching page {url}: {e}")
+        return None
+
+results = test()
+print(results)
