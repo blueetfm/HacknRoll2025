@@ -4,8 +4,12 @@ import time
 from bs4 import BeautifulSoup
 import requests
 from urllib.parse import urljoin, urlparse
+import CORS
 
 from backend.check_robots import REQUEST_DELAY, crawl_page
+
+# app = Flask(__name__)
+# CORS(app)
 
 def crawl_site(start_url, queries, max_pages=15):
     """
@@ -102,3 +106,22 @@ def main():
 
 
 main()
+
+# @app.route('/analyze', methods=['POST'])
+# def analyze():
+#     data = request.json
+#     name = data.get('name')
+#     school = data.get('school')
+    
+#     if not name or not school:
+#         return jsonify({"error": "Name and school are required"}), 400
+    
+#     try:
+#         scraped_text = scrape_web(name, school)
+#         analysis_result = analyze_sentiment(scraped_text)
+#         return jsonify(analysis_result)
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
