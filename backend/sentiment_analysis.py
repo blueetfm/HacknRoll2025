@@ -8,6 +8,7 @@ numOfKeywords = 20
 custom_kw_extractor = yake.KeywordExtractor(lan=language, n=max_ngram_size, dedupLim=deduplication_threshold, top=numOfKeywords, features=None)
 
 def analyze_sentiment(text):
+    '''https://textblob.readthedocs.io/en/dev/quickstart.html'''
     blob = TextBlob(text)
     sentiment_score = blob.sentiment.polarity
     
@@ -18,6 +19,7 @@ def analyze_sentiment(text):
     else:
         overall_sentiment = "Neutral"
     
+    '''https://towardsdatascience.com/keyword-extraction-process-in-python-with-natural-language-processing-nlp-d769a9069d5c'''
     keywords = custom_kw_extractor.extract_keywords(text)
     top_keywords = [keyword[0] for keyword in keywords]
     
@@ -27,5 +29,5 @@ def analyze_sentiment(text):
         "topKeywords": top_keywords
     }
 
-results = analyze_sentiment("john is a computer science graduate with skills in programming and years of experience under his belt. he is a hard worker and is a team player")
+results = analyze_sentiment("lazy and diligent")
 print(results)
