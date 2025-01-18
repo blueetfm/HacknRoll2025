@@ -44,6 +44,7 @@ def crawl(url):
     queries = []
     # Extract name
     name = info['name']
+    crawled_results = False
 
     # Get the 2 most recent job titles
     recent_jobs = info['job_titles'][:1]  # Slice the first 2 job titles
@@ -58,7 +59,7 @@ def crawl(url):
         f"{'+'.join('+'.join(school.split()) for school in recent_education)}"
     )
     # query = "Jiang Zong Zhe"
-    # print(query)
+    print(query)
     seed_url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={API_KEY}&cx={CX}"
     search_results = crawl_google_search(seed_url)
     # print(search_results)
@@ -72,4 +73,4 @@ def crawl(url):
         print(crawled_results)
         return crawled_results
 
-# print(crawl("https://tdbzbuocqslnmyfvxokj.supabase.co/storage/v1/object/public/images/Resume.jpg"))
+print(crawl("https://tdbzbuocqslnmyfvxokj.supabase.co/storage/v1/object/public/images/Resume.jpg"))

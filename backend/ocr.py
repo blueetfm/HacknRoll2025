@@ -3,7 +3,7 @@ import urllib.request
 import os
 import pytesseract
 import re
-import easyocr
+from paddleocr import PaddleOCR
 
 # script_dir = os.path.dirname(__file__)
 # rel_path = "src/Resume.jpg"
@@ -31,15 +31,21 @@ def read_resume(url):
     # split_text = text.split("\n")
     # parsed_info = extract_relevant_info(split_text)
     # return parsed_info
-    reader = easyocr.Reader(['en'])  # Specify the language(s) as needed
+    reader = PaddleOCR(
+    use_angle_cls=False, 
+    lang='en',
+    use_gpu=False,         # Ensure it runs on CPU
+    cpu_threads=2,         # Limit threads for efficiency
+    det_db_box_thresh=0.7, # Adjust detection threshold
+    rec_batch_num=2        # Reduce batch size
+    )  # Specify the language(s) as needed
 
     # Step 3: Read text from the image
-    results = reader.readtext("image")
-
+    results = reader.ocr("image")
     # Step 4: Extract text into lines
-    extracted_text = "\n".join([text for _, text, _ in results])
-    split_text = extracted_text.split("\n")  # Split into lines
-
+    txts = [line[1][0] for group in results for line in group]
+    extracted_text = "\n".join(txts)
+    split_text = extracted_text.split("\n")
     # Step 5: Parse the text lines
     parsed_info = extract_relevant_info(split_text)
     return parsed_info

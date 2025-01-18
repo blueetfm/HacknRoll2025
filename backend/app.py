@@ -12,7 +12,6 @@ from .scrape_test import REQUEST_DELAY, crawl_page, crawl_site, crawl_google_sea
 
 API_KEY = "AIzaSyB9-OpOGk5bwLNcosU4HpA35HAcvhMrBT8"
 CX = "f1d45d72b7570443b"
-os.system("apt-get update && apt-get install -y tesseract-ocr libtesseract-dev")
 
 app = Flask(__name__)
 # CORS(app)                             
