@@ -15,3 +15,4 @@ textblob==0.19.0
 tqdm==4.67.1
 yake==0.4.8
 gunicorn==23.0.0
+paddlepaddle==2.5.2
