@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import requests
 from urllib.parse import urljoin, urlparse
 
-from check_robots import REQUEST_DELAY, crawl_page
+from backend.check_robots import REQUEST_DELAY, crawl_page
 
 def crawl_site(start_url, queries, max_pages=15):
     """
@@ -60,7 +60,6 @@ def scrape_site(links):
         response = requests.get(link)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # Extract text from the first few search results
         results = soup.find_all('div', class_='g')
         text = ' '.join([result.get_text() for result in results[:]])
         print(f"text: {text} \n")
