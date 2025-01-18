@@ -58,10 +58,10 @@ def crawl(url):
         f"{'+'.join('+'.join(school.split()) for school in recent_education)}"
     )
     # query = "Jiang Zong Zhe"
-    print(query)
+    # print(query)
     seed_url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={API_KEY}&cx={CX}"
     search_results = crawl_google_search(seed_url)
-    print(search_results)
+    # print(search_results)
 
     if search_results:
         crawled_results = scrape_google_search_queries(search_results, queries)
@@ -72,4 +72,4 @@ def crawl(url):
         print(crawled_results)
         return crawled_results
 
-print(crawl("https://tdbzbuocqslnmyfvxokj.supabase.co/storage/v1/object/public/images/Resume.jpg"))
+# print(crawl("https://tdbzbuocqslnmyfvxokj.supabase.co/storage/v1/object/public/images/Resume.jpg"))
