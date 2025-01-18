@@ -101,5 +101,4 @@ def main():
         print(scrape_results)
 
 
-
 main()
