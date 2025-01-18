@@ -5,7 +5,6 @@ import requests
 from urllib.parse import urljoin, urlparse
 import flask_cors
 from flask import Flask, request, jsonify
-import os
 
 from .ocr import  read_resume
 from .scrape_test import REQUEST_DELAY, crawl_page, crawl_site, crawl_google_search, scrape_google_search_queries
