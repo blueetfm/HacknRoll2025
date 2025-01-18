@@ -6,6 +6,7 @@ from urllib.parse import urljoin, urlparse
 import flask_cors
 from flask import Flask, request, jsonify
 
+from .ocr import  read_resume
 from .scrape_test import REQUEST_DELAY, crawl_page, crawl_site, crawl_google_search, scrape_google_search_queries
 
 API_KEY = "AIzaSyB9-OpOGk5bwLNcosU4HpA35HAcvhMrBT8"
@@ -38,13 +39,27 @@ def crawl():
       - max_pages: (optional) Maximum number of pages to crawl (default: 15)
     """
     data = request.get_json()
-    name = data.get("name")
-    school = data.get("school")
+    url = data.get("link")
+    info = read_resume(url)
     queries = []
-    query = f"{'+'.join(name.split())}+{'+'.join(school.split())}"
+    # Extract name
+    name = info['name']
+
+    # Get the 2 most recent job titles
+    recent_jobs = info['job_titles'][:2]  # Slice the first 2 job titles
+
+    # Get the 2 most recent education titles
+    recent_education = info['education'][:2]  # Slice the first 2 education titles
+
+    # Construct the query
+    query = (
+        f"{'+'.join(name.split())}+"
+        f"{'+'.join('+'.join(job.split()) for job in recent_jobs)}+"
+        f"{'+'.join('+'.join(school.split()) for school in recent_education)}"
+    )
     seed_url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={API_KEY}&cx={CX}"
     search_results = crawl_google_search(seed_url)
-
+    
     if search_results:
         crawled_results = scrape_google_search_queries(search_results, queries)
     else:

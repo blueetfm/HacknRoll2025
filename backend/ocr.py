@@ -72,14 +72,18 @@ def extract_relevant_info(resume_elements):
 
         # Extract education
         if any(keyword in element.lower() for keyword in education_keywords):
-            if len(element.split()) <= 5:
-                relevant_info["education"].append(element.title())
+        # Preprocess to remove dates or reduce word count
+            match = re.split(r',\s*Singapore', element, maxsplit=1)
+            if match:  # Check if there's a match
+                title = match[0].strip().title()
+            if len(title.split()) <= 5:  # Check word count
+                relevant_info["education"].append(title)
 
     # Filter out empty values
     relevant_info = {key: value for key, value in relevant_info.items() if value}
     return relevant_info
 
-print(read_resume("https://tdbzbuocqslnmyfvxokj.supabase.co/storage/v1/object/public/images/Resume.jpg"))
+# print(read_resume("https://tdbzbuocqslnmyfvxokj.supabase.co/storage/v1/object/public/images/Resume.jpg"))
 
 
 
