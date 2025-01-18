@@ -11,7 +11,7 @@ API_KEY = "AIzaSyB9-OpOGk5bwLNcosU4HpA35HAcvhMrBT8"
 CX = "f1d45d72b7570443b"
 
 # app = Flask(__name__)
-# CORS(app)
+# CORS(app)                             
 
 
 def scrape_site(links):
@@ -57,8 +57,8 @@ def main():
         # info = crawled_results[page]
         
     
-        scrape_results = scrape_site(info['links'])
-        print(scrape_results)
+        # scrape_results = scrape_site(info['links'])
+        # print(scrape_results)
 
 main()
 
