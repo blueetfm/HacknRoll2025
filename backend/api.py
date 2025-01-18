@@ -50,8 +50,8 @@ supabase_instance = Supabase(toggle=True)
 
 
 if supabase_instance.supabase:
-    data = supabase_instance.retrieve_data("countries")
-    print(data)
+    data = {"id" : 2, "name": "Denmark"}
+    supabase_instance.insert_data("countries",data)
 
 
 
