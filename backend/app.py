@@ -7,6 +7,9 @@ import flask_cors
 
 from scrape import REQUEST_DELAY, crawl_page, crawl_site
 
+API_KEY = "AIzaSyB9-OpOGk5bwLNcosU4HpA35HAcvhMrBT8"
+CX = "f1d45d72b7570443b"
+
 # app = Flask(__name__)
 # CORS(app)
 
@@ -32,9 +35,9 @@ def main():
     queries.append(school)
 
     query = f"{'+'.join(name.split())}+{'+'.join(school.split())}"
-    seed_url = f"https://www.google.com/search?q={query}"
+    seed_url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={API_KEY}&cx={CX}"
 
-    crawled_results = crawl_site(seed_url, queries,max_pages=10)
+    crawled_results = crawl_site(seed_url, queries,max_pages=3)
 
     print("Total pages crawled:", len(crawled_results))
 
