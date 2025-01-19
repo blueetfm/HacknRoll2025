@@ -121,7 +121,7 @@ def crawl_page(url, queries):
         return {
             'url': url,
             'title': title,
-            'text': page_text[:],
+            'text': page_text[:5000],
             'links': links
         }
     except requests.exceptions.RequestException as e:
@@ -211,7 +211,7 @@ def summarize_and_extract_keywords_multi_topic(text, topics, num_keywords=5, sum
     kw_model = KeyBERT()
     
     keywords = kw_model.extract_keywords(
-        text, keyphrase_ngram_range=(1, 2), stop_words='english', top_n=50, use_maxsum=True, diversity=0.7
+        text, keyphrase_ngram_range=(1, 2), stop_words='english', top_n=10, use_maxsum=True, diversity=0.7
     )
     
     relevant_keywords = [
@@ -224,7 +224,7 @@ def summarize_and_extract_keywords_multi_topic(text, topics, num_keywords=5, sum
     summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
     
     context_enhanced_text = f"{combined_topics}: {text}"  # Adding topics as a prefix for context
-    summary = summarizer(context_enhanced_text, max_length=summary_length, min_length=30, do_sample=False)
+    summary = summarizer(context_enhanced_text, max_length=10, min_length=5, do_sample=False)
     
     return {
         "summary": summary[0]['summary_text'],
@@ -234,8 +234,10 @@ def summarize_and_extract_keywords_multi_topic(text, topics, num_keywords=5, sum
 def summarize_scraped_text(crawled_results: [{}], queries):
     summary = []
     for url in crawled_results:
-        summarized_url = summarize_and_extract_keywords_multi_topic(url['text'], queries)
-        summary.append(summarized_url)
+        if url is not None and url['text'] is not None:
+            print(f"url text: {url['text']}")
+            summarized_url = summarize_and_extract_keywords_multi_topic(url['text'], queries)
+            summary.append(summarized_url)
     
     return summary
         
