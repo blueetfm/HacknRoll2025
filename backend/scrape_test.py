@@ -68,7 +68,7 @@ def check_robots_example():
             print(f"Could not fetch robots.txt: {e}")
         print("-" * 50)
 
-def crawl_page(url):
+def crawl_page(url, queries):
     """Fetch a single URL and return its title, text, and links."""
     try:
         # First check robots.txt
@@ -106,6 +106,11 @@ def crawl_page(url):
                 continue
             # Convert relative URLs to absolute
             absolute_url = urljoin(url, href)
+
+            # Skip if the page text doesnt include anything about the person / school
+            if not any(query in page_text for query in queries):
+                print("Skipping as no content found")
+                continue
             # Skip if the absolute URL is the same as current page
             if absolute_url == url:
                 continue
